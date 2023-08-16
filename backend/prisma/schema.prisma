@@ -11,21 +11,42 @@ datasource db {
 }
 
 model Employee {
-  id          Int       @id @default(autoincrement())
-  fName       String
-  mName       String?
-  lName       String
-  age         Int
-  phoneNumber String?
-  address     String?
-  city        String
-  state       String
-  department  String?
-  title       String
-  startDate   DateTime  @default(now())
-  role        Role      @default(USER)
+  id           Int         @id @default(autoincrement())
+  fName        String
+  mName        String?
+  lName        String
+  age          Int
+  email        String? @unique
+  phoneNumber  String?
+  address      String?
+  city         String
+  state        String
+  deptName     String?
+  title        String
+  startDate    DateTime    @default(now())
+  role         Role        @default(USER)
+  department   Department?  @relation(fields: [deptId], references: [id])
+  deptId       Int?
+  project      Project?    @relation(fields: [projectId], references: [id])
+  projectId    Int?
 }
 
+model Department {
+  id        Int        @id @default(autoincrement())
+  title     String
+  director  String
+  employees Employee[]
+  projects  Project[]
+}
+
+model Project {
+  id         Int        @id @default(autoincrement())
+  title      String
+  startDate  DateTime   @default(now())
+  employees  Employee[]
+  deptId     Int?
+  department Department? @relation(fields: [deptId], references: [id])
+}
 
 enum Role {
   USER

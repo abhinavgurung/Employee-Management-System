@@ -1,11 +1,11 @@
 import express from 'express';
-import { Prisma, PrismaClient } from '@prisma/client';
+import {PrismaClient } from '@prisma/client';
 
 const userRouter = express.Router();
 const prisma = new PrismaClient();
 
 /**
- * Route to add a user
+ * add an Employee
  */
 userRouter.post('/employee', async (req, res) => {
   const { fname, lname, mname, age, city, state, title } = req.body;
@@ -24,7 +24,7 @@ userRouter.post('/employee', async (req, res) => {
 });
 
 /**
- * get the user with the given user id
+ * get the employee with the given  id
  */
 userRouter.get('/employee/:empID', async (req, res) => {
   const empID = req.params.empID;
