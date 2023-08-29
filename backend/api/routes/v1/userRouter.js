@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 /**
  * add an Employee
  */
-userRouter.post('/employee', async (req, res) => {
+userRouter.post('/', async (req, res) => {
   const { fname, lname, mname, age, city, state, title } = req.body;
   const user = await prisma.employee.create({
     data: {
@@ -24,9 +24,22 @@ userRouter.post('/employee', async (req, res) => {
 });
 
 /**
+ * Get all the employees
+ */
+userRouter.get('/all', async (req, res) => {
+  const employees = await prisma.employee.findMany();
+
+  if (employees) {
+    res.status(200).json(employees);
+  } else {
+    res.status(404).json({ message: 'Error getting users' });
+  }
+});
+
+/**
  * get the employee with the given  id
  */
-userRouter.get('/employee/:empID', async (req, res) => {
+userRouter.get('/:empID', async (req, res) => {
   const empID = req.params.empID;
   const user = await prisma.employee.findUnique({
     where: {
@@ -41,30 +54,19 @@ userRouter.get('/employee/:empID', async (req, res) => {
   }
 });
 
-/**
- * Get all the employees
- */
-userRouter.get('/employees', async (req, res) => {
-  const employees = await prisma.employee.findMany();
 
-  if (employees) {
-    res.status(200).json(employees);
-  } else {
-    res.status(404).json({ message: 'Error getting users' });
-  }
-});
 
 /**
  * update partial info for the employee
  */
-userRouter.patch('/employee/:empID', async (req, res) => {
+userRouter.patch('/:empID', async (req, res) => {
   console.log(`Partial update an employee with id ${empID}`);
 });
 
 /**
  * delete a user for a given id
  */
-userRouter.delete('/employee/:empID', async (req, res) => {
+userRouter.delete('/:empID', async (req, res) => {
   const id = req.params.empID;
   console.log(`deleting a employee with id ${id}`);
   const user = await prisma.employee.findUnique({
