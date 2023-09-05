@@ -1,12 +1,28 @@
-import Button from '@mui/material/Button';
+import LoginPage from './pages/LoginPage';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import RootLayout from './components/RootLayout';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom';
+
+const routes = createRoutesFromElements(
+  <Route path="/" element={<RootLayout />}>
+    <Route index element={<Dashboard />}></Route>
+    <Route path="signup" element={<Signup />}></Route>
+    <Route path="login" element={<LoginPage />}></Route>
+  </Route>
+);
+
+const router = createBrowserRouter(routes);
 
 export function App() {
   return (
     <>
-      <h1>Hello world!</h1>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
+      <RouterProvider router={router}></RouterProvider>
     </>
   );
 }
