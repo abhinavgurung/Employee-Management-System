@@ -1,6 +1,7 @@
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const Navbar = () =>{
+const Navbar = () => {
+  <>
     <nav>
       <ul>
         <li>
@@ -13,7 +14,8 @@ const Navbar = () =>{
           <NavLink to="/signup">Signup</NavLink>
         </li>
       </ul>
-    </nav>;
+    </nav>
+  </>;
 };
 
 export default Navbar;

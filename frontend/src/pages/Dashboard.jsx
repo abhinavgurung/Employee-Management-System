@@ -1,11 +1,18 @@
-import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
 const Dashboard = () => {
   return (
     <>
-      <h3>Dashboard</h3>
+      <CssBaseline />
+      <Container fixed>
+        <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
+          <p>This is a Dashboard, we will fill it later</p>
+        </Box>
+      </Container>
     </>
   );
 };
