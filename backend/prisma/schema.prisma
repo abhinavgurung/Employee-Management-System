@@ -29,6 +29,7 @@ model Employee {
   deptId       Int?
   project      Project?    @relation(fields: [projectId], references: [id])
   projectId    Int?
+  password String
 }
 
 model Department {

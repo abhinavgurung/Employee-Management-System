@@ -4,6 +4,7 @@ import cors from 'cors';
 import userRouter from './api/routes/v1/userRouter.js';
 import projectRouter from './api/routes/v1/projectRouter.js';
 import departmentRouter from './api/routes/v1/departmentRouter.js';
+import authRouter from './api/routes/v1/authRouter.js';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use('/project', projectRouter);
 //Handle Department routes
 app.use('/department', departmentRouter);
 
+app.use('/auth', authRouter);
 
 const server = app.listen(PORT, () => {
   console.log(`server listening at port ${PORT}`);

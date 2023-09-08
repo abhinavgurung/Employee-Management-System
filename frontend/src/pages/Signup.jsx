@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const Signup = () => {
   const [state, setState] = React.useState({
@@ -19,6 +21,8 @@ const Signup = () => {
     email: '',
     password: '',
   });
+
+  const [error, setError] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,6 +34,15 @@ const Signup = () => {
       email: data.get('email'),
       password: data.get('password'),
     }));
+
+    if (
+      state.firstName == '' ||
+      state.lastName == '' ||
+      state.email == '' ||
+      state.password == ''
+    ) {
+      setError(true);
+    }
   };
 
   return (
@@ -93,6 +106,11 @@ const Signup = () => {
                 autoComplete="new-password"
               />
             </Grid>
+            <Stack sx={{ width: '100%' }} spacing={2} marginTop={4}>
+              {error ? (
+                <Alert severity="error">One of the Fields is missing!</Alert>
+              ) : null}
+            </Stack>
           </Grid>
           <Button
             type="submit"

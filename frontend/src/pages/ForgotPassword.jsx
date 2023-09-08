@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   Container,
   Box,
@@ -11,44 +11,21 @@ import {
   Checkbox,
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockResetIcon from '@mui/icons-material/LockReset';
 import Avatar from '@mui/material/Avatar';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import axios from 'axios';
 
-const LoginPage = () => {
-  const [login, setLogin] = React.useState({
-    email: '',
-    password: '',
-  });
-
-  const [errors, setErrors] = React.useState({
-    emailError: false,
-    passwordError: false,
-  });
+const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
 
   //handle form submission
-  const handleSubmit = (event) => {
+  const handleReset = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    setLogin((login) => ({
-      ...login,
-      email: data.get('email'),
-      password: data.get('password'),
-    }));
-
-    axios
-      .post('http://localhost:5000/auth/login', {
-        firstName: 'Abhinav',
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (email == '') {
+      setEmailError(true);
+    }
   };
 
   return (
@@ -64,14 +41,14 @@ const LoginPage = () => {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <LockResetIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Reset Password
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleReset}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -84,24 +61,8 @@ const LoginPage = () => {
               name="email"
               autoComplete="email"
               autoFocus
-              error={errors.emailError}
-              helperText={errors.emailError ? 'Email is Required' : null}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              error={errors.passwordError}
-              helperText={errors.passwordError ? 'Password is Required' : null}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              error={emailError}
+              helperText={emailError?'Please enter your email address': 'Required*'}
             />
             <Button
               type="submit"
@@ -109,12 +70,12 @@ const LoginPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Reset
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="forgot-password" variant="body2">
-                  Forgot password?
+                <Link href="/login" variant="body2">
+                  Login
                 </Link>
               </Grid>
               <Grid item>
@@ -131,4 +92,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;

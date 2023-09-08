@@ -10,6 +10,7 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
+import ForgotPasswordPage from './pages/ForgotPassword';
 
 const themeLight = createTheme({
   palette: {
@@ -35,6 +36,7 @@ const routes = createRoutesFromElements(
     <Route index element={<Dashboard />}></Route>
     <Route path="signup" element={<Signup />}></Route>
     <Route path="login" element={<LoginPage />}></Route>
+    <Route path="forgot-password" element={<ForgotPasswordPage />}></Route>
   </Route>
 );
 

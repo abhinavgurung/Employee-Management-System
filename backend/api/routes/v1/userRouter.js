@@ -1,5 +1,5 @@
 import express from 'express';
-import {PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const userRouter = express.Router();
 const prisma = new PrismaClient();
@@ -53,8 +53,6 @@ userRouter.get('/:empID', async (req, res) => {
     res.status(404).json({ message: 'User not found' });
   }
 });
-
-
 
 /**
  * update partial info for the employee
