@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,37 +11,34 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+  firstName: yup
+    .string('Enter your first name')
+    .required('First name is required'),
+
+  lastName: yup
+    .string('Enter your last name')
+    .required('Last name is required'),
+  email: yup
+    .string('Enter your email')
+    .email('Enter a valid email')
+    .required('Email is required'),
+    password: yup
+    .string('Enter your password')
+    .required('Password is required'),
+});
 
 const Signup = () => {
-  const [state, setState] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+  const formik = useFormik({
+    initialValues: { firstName: '', lastName: '', email: '', password: '' },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
-
-  const [error, setError] = React.useState(false);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    setState((state) => ({
-      ...state,
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    }));
-
-    if (
-      state.firstName == '' ||
-      state.lastName == '' ||
-      state.email == '' ||
-      state.password == ''
-    ) {
-      setError(true);
-    }
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -62,18 +57,30 @@ const Signup = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={formik.handleSubmit}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
-                required
                 fullWidth
                 id="firstName"
                 label="First Name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.firstName}
                 autoFocus
               />
+              {formik.touched.firstName && formik.errors.firstName ? (
+                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
+                  <Alert severity="error">First name is required!</Alert>
+                </Stack>
+              ) : null}
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -83,7 +90,15 @@ const Signup = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.lastName}
               />
+              {formik.touched.lastName && formik.errors.lastName ? (
+                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
+                  <Alert severity="error">Last name is required!</Alert>
+                </Stack>
+              ) : null}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -93,7 +108,15 @@ const Signup = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
+              {formik.touched.email && formik.errors.email ? (
+                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
+                  <Alert severity="error">Email is required!</Alert>
+                </Stack>
+              ) : null}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -104,13 +127,16 @@ const Signup = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
               />
-            </Grid>
-            <Stack sx={{ width: '100%' }} spacing={2} marginTop={4}>
-              {error ? (
-                <Alert severity="error">One of the Fields is missing!</Alert>
+              {formik.touched.password && formik.errors.password ? (
+                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
+                  <Alert severity="error">Password is required!</Alert>
+                </Stack>
               ) : null}
-            </Stack>
+            </Grid>
           </Grid>
           <Button
             type="submit"
