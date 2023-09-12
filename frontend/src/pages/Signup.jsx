@@ -26,14 +26,22 @@ const validationSchema = yup.object({
     .string('Enter your email')
     .email('Enter a valid email')
     .required('Email is required'),
-    password: yup
-    .string('Enter your password')
-    .required('Password is required'),
+  password: yup.string('Enter your password').required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .required('Re-enter your password')
+    .oneOf([yup.ref('password')], 'Passwords does not match'),
 });
 
 const Signup = () => {
   const formik = useFormik({
-    initialValues: { firstName: '', lastName: '', email: '', password: '' },
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
@@ -76,11 +84,9 @@ const Signup = () => {
                 value={formik.values.firstName}
                 autoFocus
               />
-              {formik.touched.firstName && formik.errors.firstName ? (
-                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
-                  <Alert severity="error">First name is required!</Alert>
-                </Stack>
-              ) : null}
+              {formik.touched.firstName && formik.errors.firstName && (
+                <div style={{ color: 'red' }}>{formik.errors.firstName}</div>
+              )}
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -94,11 +100,9 @@ const Signup = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.lastName}
               />
-              {formik.touched.lastName && formik.errors.lastName ? (
-                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
-                  <Alert severity="error">Last name is required!</Alert>
-                </Stack>
-              ) : null}
+              {formik.touched.lastName && formik.errors.lastName && (
+                <div style={{ color: 'red' }}>{formik.errors.lastName}</div>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -112,11 +116,9 @@ const Signup = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
-              {formik.touched.email && formik.errors.email ? (
-                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
-                  <Alert severity="error">Email is required!</Alert>
-                </Stack>
-              ) : null}
+              {formik.touched.email && formik.errors.email && (
+                <div style={{ color: 'red' }}>{formik.errors.email}</div>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -131,11 +133,26 @@ const Signup = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
               />
-              {formik.touched.password && formik.errors.password ? (
-                <Stack sx={{ width: '100%' }} spacing={1} marginTop={1}>
-                  <Alert severity="error">Password is required!</Alert>
-                </Stack>
-              ) : null}
+              {formik.touched.password && formik.errors.password && (
+                <div style={{ color: 'red' }}>{formik.errors.password}</div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="confirmPassword"
+                type="password"
+                id="confirmPassword"
+                autoComplete="password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.confirmPassword}
+              />
+              {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                <div style={{ color: 'red' }}>{formik.errors.confirmPassword}</div>
+              )}
             </Grid>
           </Grid>
           <Button
