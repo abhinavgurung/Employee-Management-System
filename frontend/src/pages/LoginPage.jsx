@@ -27,8 +27,9 @@ const LoginPage = () => {
       password: '',
     },
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, formikHelpers) => {
       console.log(values);
+      formikHelpers.resetForm();
     },
   });
 
@@ -69,6 +70,9 @@ const LoginPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.email}
             />
+            {formik.touched.email && formik.errors.email && (
+              <div style={{ color: 'red' }}>{formik.errors.email}</div>
+            )}
             <TextField
               margin="normal"
               required
@@ -82,6 +86,9 @@ const LoginPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.password}
             />
+            {formik.touched.password && formik.errors.password && (
+              <div style={{ color: 'red' }}>{formik.errors.password}</div>
+            )}
 
             <Button
               type="submit"
