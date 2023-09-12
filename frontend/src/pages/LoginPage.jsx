@@ -15,41 +15,22 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import axios from 'axios';
 
+const validationSchema = yup.object({
+  email: yup.string().required('Email is required').email('Email is invalid'),
+  password: yup.string().required('Password is required'),
+});
 const LoginPage = () => {
-  const [login, setLogin] = React.useState({
-    email: '',
-    password: '',
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
-
-  const [errors, setErrors] = React.useState({
-    emailError: false,
-    passwordError: false,
-  });
-
-  //handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    setLogin((login) => ({
-      ...login,
-      email: data.get('email'),
-      password: data.get('password'),
-    }));
-
-    axios
-      .post('http://localhost:5000/auth/login', {
-        firstName: 'Abhinav',
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   return (
     <>
@@ -71,7 +52,7 @@ const LoginPage = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -84,8 +65,9 @@ const LoginPage = () => {
               name="email"
               autoComplete="email"
               autoFocus
-              error={errors.emailError}
-              helperText={errors.emailError ? 'Email is Required' : null}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
             />
             <TextField
               margin="normal"
@@ -96,13 +78,11 @@ const LoginPage = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              error={errors.passwordError}
-              helperText={errors.passwordError ? 'Password is Required' : null}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
