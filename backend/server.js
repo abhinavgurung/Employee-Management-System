@@ -9,11 +9,11 @@ import authRouter from './api/routes/v1/authRouter.js';
 dotenv.config();
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
 
 // Handle Employee routes
 app.use('/employee', userRouter);

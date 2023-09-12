@@ -15,14 +15,14 @@ model Employee {
   fName        String
   mName        String?
   lName        String
-  age          Int
-  email        String? @unique
+  age          Int?
+  email        String @unique
   phoneNumber  String?
   address      String?
-  city         String
-  state        String
+  city         String?
+  state        String?
   deptName     String?
-  title        String
+  title        String?
   startDate    DateTime    @default(now())
   role         Role        @default(USER)
   department   Department?  @relation(fields: [deptId], references: [id])

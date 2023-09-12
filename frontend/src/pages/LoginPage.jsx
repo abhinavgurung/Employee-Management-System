@@ -15,22 +15,33 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { LOGIN_URL } from '../constants/Constant';
 
 const validationSchema = yup.object({
   email: yup.string().required('Email is required').email('Email is invalid'),
   password: yup.string().required('Password is required'),
 });
 const LoginPage = () => {
+  const onSubmit = async (values, formikHelpers) => {
+    await axios
+      .post(LOGIN_URL, values)
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema,
-    onSubmit: (values, formikHelpers) => {
-      console.log(values);
-      formikHelpers.resetForm();
-    },
+    onSubmit,
   });
 
   return (

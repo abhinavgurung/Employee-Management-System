@@ -9,10 +9,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import axios from 'axios';
+import { REGISTER_URL } from '../constants/Constant';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const validationSchema = yup.object({
   firstName: yup
@@ -33,7 +37,37 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords does not match'),
 });
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Signup = () => {
+  const [formError, setFormError] = React.useState(false);
+  const [formSubmitted, setFormSubmitted] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const onSubmit = async (values, formikHelpers) => {
+    await axios
+      .post(REGISTER_URL, values)
+      .then((response) => {
+        console.log(response.status);
+        console.log(response.data);
+        setOpen(true);
+        formikHelpers.resetForm();
+      })
+      .catch((error) => {
+        setFormError(true);
+        console.log(error);
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -43,9 +77,7 @@ const Signup = () => {
       confirmPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit,
   });
 
   return (
@@ -150,9 +182,12 @@ const Signup = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.confirmPassword}
               />
-              {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                <div style={{ color: 'red' }}>{formik.errors.confirmPassword}</div>
-              )}
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <div style={{ color: 'red' }}>
+                    {formik.errors.confirmPassword}
+                  </div>
+                )}
             </Grid>
           </Grid>
           <Button
@@ -172,6 +207,17 @@ const Signup = () => {
           </Grid>
         </Box>
       </Box>
+      {formError ? (
+        <Alert severity="error">
+          There is an error registering , please refresh page and try again!
+        </Alert>
+      ) : null}
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Your Registration is Successfull, please go to Login page!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

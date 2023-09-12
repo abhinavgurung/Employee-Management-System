@@ -14,10 +14,8 @@ userRouter.post('/', async (req, res) => {
       fName: fname,
       mName: mname ?? '',
       lName: lname,
-      age,
-      city,
-      state,
-      title,
+      email,
+      password,
     },
   });
   res.json({ message: 'success', data: user });
