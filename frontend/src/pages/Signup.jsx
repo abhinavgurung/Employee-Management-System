@@ -15,7 +15,6 @@ import axios from 'axios';
 import { REGISTER_URL } from '../constants/Constant';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 const validationSchema = yup.object({
@@ -43,7 +42,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const Signup = () => {
   const [formError, setFormError] = React.useState(false);
-  const [formSubmitted, setFormSubmitted] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {

@@ -12,14 +12,21 @@ const prisma = new PrismaClient();
 authRouter.post('/login', async (req, res) => {
   console.log('inside login route server');
   const { email, password } = req.body;
-  console.log('email: ' + email);
-  console.log('password: ' + password);
 
   //verify if email exists
+  const employee = await prisma.employee.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (!employee) {
+    console.log('no employee found with that email');
+    res.status(404).json({ message: 'user not found' });
+    return;
+  }
 
   //match password
-
-  res.status(200).json({ message: 'authenticated' });
+  res.status(200).json(employee);
 });
 
 /**
@@ -47,11 +54,6 @@ authRouter.post('/register', async (req, res) => {
     },
   });
   res.status(200).json({ message: 'success', data: user });
-
-  //create user object
-
-  //store the user
-  // console.log('register the user');
 });
 
 export default authRouter;

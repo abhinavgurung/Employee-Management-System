@@ -17,20 +17,41 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { LOGIN_URL } from '../constants/Constant';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
 
 const validationSchema = yup.object({
   email: yup.string().required('Email is required').email('Email is invalid'),
   password: yup.string().required('Password is required'),
 });
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const LoginPage = () => {
+  const [formError, setFormError] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   const onSubmit = async (values, formikHelpers) => {
     await axios
       .post(LOGIN_URL, values)
       .then((response) => {
+        setOpen(true);
         console.log(response);
         console.log(response.data);
+        formikHelpers.resetForm();
       })
       .catch((error) => {
+        setFormError(true);
         console.log(error);
       });
   };
@@ -123,7 +144,21 @@ const LoginPage = () => {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+        {formError ? (
+          <Alert severity="error">
+            An error has occured trying to sign you in!
+          </Alert>
+        ) : null}
+
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            Login Successful, Have fun!
+          </Alert>
+        </Snackbar>
       </Container>
     </>
   );
