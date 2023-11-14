@@ -10,23 +10,27 @@ const prisma = new PrismaClient();
  */
 
 authRouter.post('/login', async (req, res) => {
-  console.log('inside login route server');
   const { email, password } = req.body;
-
   //verify if email exists
   const employee = await prisma.employee.findUnique({
     where: {
       email,
     },
   });
+
   if (!employee) {
-    console.log('no employee found with that email');
     res.status(404).json({ message: 'user not found' });
     return;
   }
-
-  //match password
-  res.status(200).json(employee);
+  bcrypt.compare(password, employee.password, (err, response) => {
+    if (err) {
+      res.status(401).json({ message: 'Password is incorrect!' });
+      return;
+    }
+    if (response) {
+      res.status(200).json(employee);
+    }
+  });
 });
 
 /**

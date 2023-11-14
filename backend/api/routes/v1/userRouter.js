@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
  * add an Employee
  */
 userRouter.post('/', async (req, res) => {
-  const { fname, lname, mname, age, city, state, title } = req.body;
+  const { fname, lname, mname, email, password, age, city, state, title } =
+    req.body;
   const user = await prisma.employee.create({
     data: {
       fName: fname,
@@ -24,10 +25,11 @@ userRouter.post('/', async (req, res) => {
 /**
  * Get all the employees
  */
-userRouter.get('/all', async (req, res) => {
+userRouter.get('/', async (req, res) => {
   const employees = await prisma.employee.findMany();
-
-  if (employees) {
+  console.log(typeof employees);
+  console.log(employees);
+  if (employees.length > 0) {
     res.status(200).json(employees);
   } else {
     res.status(404).json({ message: 'Error getting users' });
@@ -56,7 +58,13 @@ userRouter.get('/:empID', async (req, res) => {
  * update partial info for the employee
  */
 userRouter.patch('/:empID', async (req, res) => {
-  console.log(`Partial update an employee with id ${empID}`);
+  const id = req.params.empID;
+  const updateData = req.body;
+  const updatedEmployee = await prisma.employee.update({
+    where: { id: Number(id) },
+    data: updateData,
+  });
+  res.status(200).send(updatedEmployee);
 });
 
 /**
